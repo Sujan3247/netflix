@@ -38,3 +38,26 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+
+
+Phase 1 Complete
+
+Feature	Status
+🔐 Google Sign In/Out	✅ Done
+📤 Movie Upload (video + description)	✅ Done
+🖼 Banner Image Upload	✅ Done
+🎬 Movie List Display	✅ Done
+🧹 Movie Deletion	✅ Done
+🎞 Featured Banner	✅ Done
+🧭 Netflix-style UI (navbar, padding)	✅ Done
+🔎 Real-time Search Bar	✅ Done
+
+Here’s what we build in Phase 2:
+
+Feature	Description
+🧠 Movie Categories	Group by Action, Comedy, etc.
+⭐ Watchlist per User	"My List" feature like Netflix
+📝 Edit Movie Info (Admin)	Change title, desc, video, banner
+🧠 User Upload History	Show only uploads by the current user
+🔄 Infinite Scroll or Pagination	Load more as user scrolls
+🌍 Vercel Deployment	Take it LIVE on your own domain
