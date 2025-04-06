@@ -1,13 +1,21 @@
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { auth, db } from "../lib/firebase";
 import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import Link from "next/link";
 
 export default function Home() {
-  const [user] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const [movies, setMovies] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/login");
+    }
+  }, [user, loading, router]);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -23,6 +31,8 @@ export default function Home() {
 
   const featuredMovie = movies[Math.floor(Math.random() * movies.length)];
 
+  if (loading || !user) return <div className="text-white p-6">Loading...</div>;
+
   return (
     <div className="min-h-screen bg-black text-white">
       {/* NAVBAR */}
@@ -36,21 +46,12 @@ export default function Home() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          {user ? (
-            <button
-              onClick={() => auth.signOut()}
-              className="bg-gray-700 px-3 py-1 rounded hover:bg-gray-600"
-            >
-              Logout
-            </button>
-          ) : (
-            <button
-              onClick={() => (window.location.href = "/login")}
-              className="bg-red-600 px-3 py-1 rounded hover:bg-red-500"
-            >
-              Login
-            </button>
-          )}
+          <button
+            onClick={() => auth.signOut()}
+            className="bg-gray-700 px-3 py-1 rounded hover:bg-gray-600"
+          >
+            Logout
+          </button>
         </div>
       </nav>
 

@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { auth } from "../lib/firebase";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 
@@ -9,6 +12,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, loading] = useAuthState(auth);
+  const [verifying, setVerifying] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
@@ -19,19 +23,45 @@ export default function Login() {
         alert("Account created!");
       } else {
         await signInWithEmailAndPassword(auth, email, password);
-        router.push("/");
       }
+
+      setVerifying(true); // Show spinner during post-login
+
+      setTimeout(() => {
+        const currentUser = auth.currentUser;
+        if (currentUser?.email === "sujanchowdarypuvvada@gmail.com") {
+          router.push("/upload");
+        } else {
+          router.push("/");
+        }
+      }, 1500);
     } catch (err) {
       alert(err.message);
     }
   };
 
   if (loading) return <p className="text-white p-10">Loading...</p>;
-  if (user) router.push("/");
+
+  if (verifying) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-red-600 border-opacity-50"></div>
+        <p className="mt-6 text-lg font-semibold animate-pulse">Verifying...</p>
+      </div>
+    );
+  }
+
+  if (user) {
+    router.push("/");
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-black text-white flex items-center justify-center">
-      <form onSubmit={handleSubmit} className="bg-zinc-900 p-8 rounded-lg w-full max-w-sm flex flex-col gap-4">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-zinc-900 p-8 rounded-lg w-full max-w-sm flex flex-col gap-4"
+      >
         <h1 className="text-2xl font-bold text-center">
           {isNewUser ? "Create Account" : "Login to SujanFlix"}
         </h1>
