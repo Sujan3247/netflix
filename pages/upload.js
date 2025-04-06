@@ -44,6 +44,8 @@ export default function Upload() {
       <h1 className="text-3xl font-bold mb-6">Upload a Movie</h1>
       {!user ? (
         <p className="text-gray-400">Please sign in to upload movies.</p>
+      ) : user.email !== "sujanchowdarypuvvada@gmail.com" ? (
+        <p className="text-red-400">Only the admin can upload movies.</p>
       ) : (
         <div className="w-full max-w-md flex flex-col gap-4">
           <input
@@ -55,7 +57,7 @@ export default function Upload() {
           />
           <input
             type="text"
-            placeholder="Video URL (e.g. Cloudinary)"
+            placeholder="Video URL"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             className="p-3 rounded bg-zinc-800 text-white border border-zinc-600"

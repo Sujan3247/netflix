@@ -27,7 +27,7 @@ export default function Home() {
     <div className="min-h-screen bg-black text-white">
       {/* NAVBAR */}
       <nav className="flex justify-between items-center px-6 py-4 bg-black bg-opacity-80 backdrop-blur sticky top-0 z-50">
-        <h1 className="text-2xl font-extrabold text-red-600">ThunderFlix</h1>
+        <h1 className="text-2xl font-extrabold text-red-600">SujanFlix</h1>
         <div className="flex items-center gap-4">
           <input
             type="text"
@@ -59,7 +59,10 @@ export default function Home() {
         <div
           className="relative h-[60vh] bg-cover bg-center flex items-end p-6"
           style={{
-            backgroundImage: `url('${featuredMovie.banner || "https://source.unsplash.com/1600x900/?movie"}')`,
+            backgroundImage: `url('${
+              featuredMovie.banner ||
+              "https://source.unsplash.com/1600x900/?movie"
+            }')`,
           }}
         >
           <div className="bg-black bg-opacity-60 p-6 rounded max-w-2xl">
@@ -94,7 +97,7 @@ export default function Home() {
                 <video controls className="rounded w-full">
                   <source src={movie.url} type="video/mp4" />
                 </video>
-                {user && (
+                {user?.email === "sujanchowdarypuvvada@gmail.com" && (
                   <button
                     onClick={async () => {
                       if (confirm(`Delete "${movie.title}"?`)) {
