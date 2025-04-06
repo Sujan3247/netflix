@@ -11,11 +11,22 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
 
+  // ✅ Redirect unauthenticated users before anything renders
   useEffect(() => {
     if (!loading && !user) {
-      router.push("/login");
+      router.replace("/login");
     }
-  }, [user, loading]);
+  }, [user, loading, router]);
+
+  // 🧠 Show spinner while checking auth
+  if (loading || (!user && typeof window !== "undefined")) {
+    return (
+      <div className="min-h-screen bg-black text-white flex flex-col justify-center items-center">
+        <div className="animate-spin h-12 w-12 rounded-full border-4 border-red-600 border-t-transparent" />
+        <p className="mt-4 text-gray-400">Checking session...</p>
+      </div>
+    );
+  }
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -31,8 +42,6 @@ export default function Home() {
 
   const featuredMovie = movies[Math.floor(Math.random() * movies.length)];
 
-  if (loading || !user) return <div className="text-white p-6">Loading...</div>;
-
   return (
     <div className="min-h-screen bg-black text-white">
       {/* NAVBAR */}
@@ -47,7 +56,9 @@ export default function Home() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           <button
-            onClick={() => auth.signOut()}
+            onClick={() => {
+              auth.signOut().then(() => router.replace("/login"));
+            }}
             className="bg-gray-700 px-4 py-2 rounded hover:bg-gray-600 w-full sm:w-auto"
           >
             Logout
@@ -100,7 +111,8 @@ export default function Home() {
                 <video controls className="rounded w-full">
                   <source src={movie.url} type="video/mp4" />
                 </video>
-                {user?.email === "sujanchowdarypuvvada@gmail.com" && (
+                {user?.email?.toLowerCase() ===
+                  "sujanchowdarypuvvada@gmail.com" && (
                   <button
                     onClick={async () => {
                       if (confirm(`Delete "${movie.title}"?`)) {
