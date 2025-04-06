@@ -15,7 +15,7 @@ export default function Home() {
     if (!loading && !user) {
       router.push("/login");
     }
-  }, [user, loading, router]);
+  }, [user, loading]);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -36,19 +36,19 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* NAVBAR */}
-      <nav className="flex justify-between items-center px-6 py-4 bg-black bg-opacity-80 backdrop-blur sticky top-0 z-50">
+      <nav className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-4 px-6 py-4 bg-black bg-opacity-80 backdrop-blur sticky top-0 z-50">
         <h1 className="text-2xl font-extrabold text-red-600">SujanFlix</h1>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
           <input
             type="text"
             placeholder="Search..."
-            className="px-3 py-1 rounded bg-zinc-800 text-white border border-zinc-700"
+            className="w-full sm:w-auto px-3 py-2 rounded bg-zinc-800 text-white border border-zinc-700"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           <button
             onClick={() => auth.signOut()}
-            className="bg-gray-700 px-3 py-1 rounded hover:bg-gray-600"
+            className="bg-gray-700 px-4 py-2 rounded hover:bg-gray-600 w-full sm:w-auto"
           >
             Logout
           </button>
@@ -58,7 +58,7 @@ export default function Home() {
       {/* HERO BANNER */}
       {featuredMovie && (
         <div
-          className="relative h-[60vh] bg-cover bg-center flex items-end p-6"
+          className="relative h-[40vh] sm:h-[60vh] bg-cover bg-center flex items-end p-4 sm:p-6"
           style={{
             backgroundImage: `url('${
               featuredMovie.banner ||
@@ -66,9 +66,11 @@ export default function Home() {
             }')`,
           }}
         >
-          <div className="bg-black bg-opacity-60 p-6 rounded max-w-2xl">
-            <h2 className="text-3xl font-bold mb-2">{featuredMovie.title}</h2>
-            <p className="text-gray-300 mb-4 line-clamp-3">
+          <div className="bg-black bg-opacity-60 p-4 sm:p-6 rounded max-w-full sm:max-w-2xl">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2">
+              {featuredMovie.title}
+            </h2>
+            <p className="text-sm sm:text-base text-gray-300 mb-4 line-clamp-3">
               {featuredMovie.description}
             </p>
             <Link href={`/movie/${featuredMovie.id}`}>
