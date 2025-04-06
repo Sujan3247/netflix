@@ -1,6 +1,6 @@
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect, useState } from "react";
-import { auth, signInWithGoogle, logout, db } from "../lib/firebase";
+import { auth, db } from "../lib/firebase";
 import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import Link from "next/link";
 
@@ -38,17 +38,17 @@ export default function Home() {
           />
           {user ? (
             <button
-              onClick={logout}
+              onClick={() => auth.signOut()}
               className="bg-gray-700 px-3 py-1 rounded hover:bg-gray-600"
             >
-              Sign Out
+              Logout
             </button>
           ) : (
             <button
-              onClick={signInWithGoogle}
+              onClick={() => (window.location.href = "/login")}
               className="bg-red-600 px-3 py-1 rounded hover:bg-red-500"
             >
-              Sign In
+              Login
             </button>
           )}
         </div>
