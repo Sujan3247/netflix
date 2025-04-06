@@ -14,25 +14,31 @@ export default function Upload() {
   const [movieLog, setMovieLog] = useState([]);
   const router = useRouter();
 
+  // 🔐 Redirect non-authenticated or non-admin users
   useEffect(() => {
     if (!loading && !user) {
       router.push("/login");
-    } else if (user && user.email !== "sujanchowdarypuvvada@gmail.com") {
+    } else if (
+      user &&
+      user.email?.toLowerCase() !== "sujanchowdarypuvvada@gmail.com"
+    ) {
       router.push("/");
     }
   }, [user, loading, router]);
 
+  // 📋 Fetch list of uploaded movies
   useEffect(() => {
     const fetchLog = async () => {
       const snap = await getDocs(collection(db, "movies"));
       setMovieLog(snap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
     };
 
-    if (user?.email === "sujanchowdarypuvvada@gmail.com") {
+    if (user?.email?.toLowerCase() === "sujanchowdarypuvvada@gmail.com") {
       fetchLog();
     }
   }, [user]);
 
+  // 🚀 Upload new movie to Firestore
   const uploadMovie = async () => {
     if (!title || !url || !description) {
       alert("Please fill in all fields");
@@ -61,7 +67,7 @@ export default function Upload() {
     }
   };
 
-  if (loading || !user || user.email !== "sujanchowdarypuvvada@gmail.com") {
+  if (loading || !user) {
     return <div className="text-white p-10">Checking access...</div>;
   }
 
@@ -106,6 +112,7 @@ export default function Upload() {
         </button>
       </div>
 
+      {/* Movie Upload Log */}
       <div className="w-full max-w-xl mt-10">
         <h2 className="text-xl font-semibold mb-2">Upload Log</h2>
         <ul className="text-sm text-gray-300 space-y-2 max-h-60 overflow-y-auto">
