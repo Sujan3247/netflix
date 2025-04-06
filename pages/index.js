@@ -8,18 +8,45 @@ import Link from "next/link";
 export default function Home() {
   const [user, loading] = useAuthState(auth);
   const [movies, setMovies] = useState([]);
+  const [featuredMovie, setFeaturedMovie] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
 
-  // ✅ Redirect unauthenticated users before anything renders
+  // ✅ Redirect unauthenticated users (hook-safe)
   useEffect(() => {
     if (!loading && !user) {
       router.replace("/login");
     }
   }, [user, loading, router]);
 
-  // 🧠 Show spinner while checking auth
-  if (loading || (!user && typeof window !== "undefined")) {
+  // ✅ Fetch movies after auth confirmed
+  useEffect(() => {
+    if (user && !loading) {
+      const fetchMovies = async () => {
+        const snap = await getDocs(collection(db, "movies"));
+        const movieList = snap.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setMovies(movieList);
+
+        if (movieList.length > 0) {
+          const randomMovie =
+            movieList[Math.floor(Math.random() * movieList.length)];
+          setFeaturedMovie(randomMovie);
+        }
+      };
+
+      fetchMovies();
+    }
+  }, [user, loading]);
+
+  const filteredMovies = movies.filter((movie) =>
+    movie.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // ✅ Block UI rendering while loading/auth not ready
+  if (loading || !user) {
     return (
       <div className="min-h-screen bg-black text-white flex flex-col justify-center items-center">
         <div className="animate-spin h-12 w-12 rounded-full border-4 border-red-600 border-t-transparent" />
@@ -27,20 +54,6 @@ export default function Home() {
       </div>
     );
   }
-
-  useEffect(() => {
-    const fetchMovies = async () => {
-      const snap = await getDocs(collection(db, "movies"));
-      setMovies(snap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-    };
-    fetchMovies();
-  }, []);
-
-  const filteredMovies = movies.filter((movie) =>
-    movie.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const featuredMovie = movies[Math.floor(Math.random() * movies.length)];
 
   return (
     <div className="min-h-screen bg-black text-white">
