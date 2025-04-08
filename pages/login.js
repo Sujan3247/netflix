@@ -4,7 +4,6 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   sendEmailVerification,
-  signOut,
 } from "firebase/auth";
 import { auth } from "../lib/firebase";
 
@@ -23,17 +22,10 @@ export default function Login() {
       if (isSignup) {
         const userCred = await createUserWithEmailAndPassword(auth, email, password);
         await sendEmailVerification(userCred.user);
-        alert("Verification email sent! Please check your inbox and verify your email.");
+        alert("Verification email sent! You can now log in.");
         return;
       } else {
-        const userCred = await signInWithEmailAndPassword(auth, email, password);
-
-        if (!userCred.user.emailVerified) {
-          alert("Please verify your email before logging in.");
-          await signOut(auth);
-          return;
-        }
-
+        await signInWithEmailAndPassword(auth, email, password);
         router.push("/intro");
       }
     } catch (err) {
@@ -42,17 +34,21 @@ export default function Login() {
   };
 
   return (
-    <div
-      className="relative min-h-screen bg-cover bg-center flex items-center justify-center text-white"
-      style={{
-        backgroundImage: `url('https://res.cloudinary.com/dijp53vwi/image/upload/v1744081928/IMG_1402_pjqhns.jpg')`,
-      }}
-    >
+    <div className="relative min-h-screen flex items-center justify-center text-white">
+      {/* ✅ Background Image with Tailwind + fallback styling */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: `url('https://res.cloudinary.com/dijp53vwi/image/upload/v1744081928/IMG_1402_pjqhns.jpg')`,
+          zIndex: -1,
+        }}
+      ></div>
+
       {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black bg-opacity-60" />
+      <div className="absolute inset-0 bg-black bg-opacity-70 z-0" />
 
       {/* Header */}
-      <div className="absolute top-0 left-0 right-0 flex justify-between items-center px-6 py-4 z-20">
+      <div className="absolute top-0 left-0 right-0 flex justify-between items-center px-6 py-4 z-10">
         <h1 className="text-3xl font-bold text-red-600">SujanFlix</h1>
         <button
           onClick={() => setIsSignup(false)}
