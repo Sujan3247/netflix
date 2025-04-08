@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  sendEmailVerification,
+  signOut,
 } from "firebase/auth";
 import { auth } from "../lib/firebase";
 
@@ -15,14 +17,32 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
     try {
       if (isSignup) {
-        await createUserWithEmailAndPassword(auth, email, password);
+        // Create account
+        const userCred = await createUserWithEmailAndPassword(auth, email, password);
+        await sendEmailVerification(userCred.user);
+        alert("Verification email sent! Please check your inbox and verify your email.");
+        return;
       } else {
-        await signInWithEmailAndPassword(auth, email, password);
-      }
+        // Login
+        const userCred = await signInWithEmailAndPassword(auth, email, password);
 
-      router.push("/intro");
+        if (!userCred.user.emailVerified) {
+          alert("Please verify your email before logging in.");
+          await signOut(auth);
+          return;
+        }
+
+        // Redirect based on admin or regular user
+        if (email.toLowerCase() === "sujanchowdarypuvvada@gmail.com") {
+          router.push("/intro");
+        } else {
+          router.push("/intro");
+        }
+      }
     } catch (err) {
       setError("Invalid credentials or network error.");
     }
@@ -36,18 +56,19 @@ export default function Login() {
       }}
     >
       <div className="absolute inset-0 bg-black bg-opacity-60" />
+
       <div className="absolute top-0 left-0 right-0 flex justify-between items-center px-6 py-4 z-20">
         <h1 className="text-3xl font-bold text-red-600">SujanFlix</h1>
         <button
           onClick={() => setIsSignup(false)}
-          className="bg-red-600 px-4 py-2 rounded font-semibold hover:bg-red-500"
+          className="bg-red-600 px-4 py-2 rounded text-white font-semibold hover:bg-red-500"
         >
           Sign In
         </button>
       </div>
 
       <div className="relative z-10 max-w-2xl text-center px-4 py-16">
-        <h1 className="text-4xl sm:text-5xl font-extrabold mb-6">
+        <h1 className="text-4xl sm:text-5xl font-extrabold mb-6 leading-tight">
           Unlimited movies, TV shows, and more.
         </h1>
         <p className="text-lg sm:text-xl mb-4">Watch anywhere. Cancel anytime.</p>
