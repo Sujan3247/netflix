@@ -12,45 +12,38 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
 
-  // Redirect unauthenticated users
   useEffect(() => {
     if (!loading && !user) {
       router.replace("/login");
     }
   }, [user, loading, router]);
 
-  // Fetch movies after auth
   useEffect(() => {
-    if (user && !loading) {
-      const fetchMovies = async () => {
-        const snap = await getDocs(collection(db, "movies"));
-        const movieList = snap.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setMovies(movieList);
+    const fetchMovies = async () => {
+      const snap = await getDocs(collection(db, "movies"));
+      const movieList = snap.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setMovies(movieList);
+      if (movieList.length > 0) {
+        setFeaturedMovie(
+          movieList[Math.floor(Math.random() * movieList.length)]
+        );
+      }
+    };
 
-        if (movieList.length > 0) {
-          const randomMovie =
-            movieList[Math.floor(Math.random() * movieList.length)];
-          setFeaturedMovie(randomMovie);
-        }
-      };
-
-      fetchMovies();
-    }
-  }, [user, loading]);
+    if (user) fetchMovies();
+  }, [user]);
 
   const filteredMovies = movies.filter((movie) =>
     movie.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Show spinner while loading
   if (loading || !user) {
     return (
-      <div className="min-h-screen bg-black text-white flex flex-col justify-center items-center">
-        <div className="animate-spin h-12 w-12 rounded-full border-4 border-red-600 border-t-transparent" />
-        <p className="mt-4 text-gray-400">Checking session...</p>
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <p>Loading...</p>
       </div>
     );
   }
@@ -82,19 +75,17 @@ export default function Home() {
       {/* HERO BANNER */}
       {featuredMovie && (
         <div
-          className="relative h-[40vh] sm:h-[60vh] bg-cover bg-center flex items-end p-4 sm:p-6"
+          className="relative h-[70vh] bg-cover bg-center flex items-end text-white"
           style={{
-            backgroundImage: `url('${
-              featuredMovie.banner ||
-              "https://source.unsplash.com/1600x900/?movie"
-            }')`,
+            backgroundImage: `url('${featuredMovie.banner || "https://source.unsplash.com/1600x900/?cinema"}')`,
+            boxShadow: "inset 0 -60px 80px rgba(0,0,0,0.8)",
           }}
         >
-          <div className="bg-black bg-opacity-60 p-4 sm:p-6 rounded w-full max-w-2xl">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-2">
+          <div className="bg-black bg-opacity-60 p-6 w-full sm:max-w-2xl">
+            <h2 className="text-3xl sm:text-5xl font-bold mb-2 drop-shadow">
               {featuredMovie.title}
             </h2>
-            <p className="text-sm sm:text-base text-gray-300 mb-4 line-clamp-3">
+            <p className="text-sm sm:text-lg text-gray-300 mb-4 line-clamp-3">
               {featuredMovie.description}
             </p>
             <Link href={`/movie/${featuredMovie.id}`}>
@@ -121,10 +112,17 @@ export default function Home() {
                     {movie.title}
                   </h4>
                 </Link>
-                <video controls className="rounded w-full">
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="rounded w-full"
+                >
                   <source src={movie.url} type="video/mp4" />
                 </video>
-                {user?.email?.toLowerCase() ===
+
+                {user.email.toLowerCase() ===
                   "sujanchowdarypuvvada@gmail.com" && (
                   <button
                     onClick={async () => {

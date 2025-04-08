@@ -34,31 +34,30 @@ export default function Login() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center text-white">
-      {/* ✅ Background Image with Tailwind + fallback styling */}
+    <div className="relative min-h-screen flex items-center justify-center text-white overflow-hidden">
+      {/* ✅ Background image */}
       <div
-        className="absolute inset-0 bg-cover bg-center"
+        className="fixed inset-0 bg-cover bg-center z-0"
         style={{
           backgroundImage: `url('https://res.cloudinary.com/dijp53vwi/image/upload/v1744081928/IMG_1402_pjqhns.jpg')`,
-          zIndex: -1,
         }}
       ></div>
 
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black bg-opacity-70 z-0" />
+      {/* ✅ Dark overlay */}
+      <div className="fixed inset-0 bg-black bg-opacity-70 z-0" />
 
-      {/* Header */}
-      <div className="absolute top-0 left-0 right-0 flex justify-between items-center px-6 py-4 z-10">
+      {/* ✅ Page header */}
+      <div className="absolute top-0 left-0 right-0 z-10 px-6 py-4 flex justify-between items-center">
         <h1 className="text-3xl font-bold text-red-600">SujanFlix</h1>
         <button
           onClick={() => setIsSignup(false)}
-          className="bg-red-600 px-4 py-2 rounded text-white font-semibold hover:bg-red-500"
+          className="bg-red-600 px-4 py-2 rounded font-semibold hover:bg-red-500"
         >
           Sign In
         </button>
       </div>
 
-      {/* Main form */}
+      {/* ✅ Login box */}
       <div className="relative z-10 max-w-2xl text-center px-4 py-16">
         <h1 className="text-4xl sm:text-5xl font-extrabold mb-6 leading-tight">
           Unlimited movies, TV shows, and more.
