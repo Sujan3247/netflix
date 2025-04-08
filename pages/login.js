@@ -21,13 +21,11 @@ export default function Login() {
 
     try {
       if (isSignup) {
-        // Create account
         const userCred = await createUserWithEmailAndPassword(auth, email, password);
         await sendEmailVerification(userCred.user);
         alert("Verification email sent! Please check your inbox and verify your email.");
         return;
       } else {
-        // Login
         const userCred = await signInWithEmailAndPassword(auth, email, password);
 
         if (!userCred.user.emailVerified) {
@@ -36,12 +34,7 @@ export default function Login() {
           return;
         }
 
-        // Redirect based on admin or regular user
-        if (email.toLowerCase() === "sujanchowdarypuvvada@gmail.com") {
-          router.push("/intro");
-        } else {
-          router.push("/intro");
-        }
+        router.push("/intro");
       }
     } catch (err) {
       setError("Invalid credentials or network error.");
@@ -55,8 +48,10 @@ export default function Login() {
         backgroundImage: `url('https://res.cloudinary.com/dijp53vwi/image/upload/v1744081928/IMG_1402_pjqhns.jpg')`,
       }}
     >
+      {/* Dark overlay */}
       <div className="absolute inset-0 bg-black bg-opacity-60" />
 
+      {/* Header */}
       <div className="absolute top-0 left-0 right-0 flex justify-between items-center px-6 py-4 z-20">
         <h1 className="text-3xl font-bold text-red-600">SujanFlix</h1>
         <button
@@ -67,6 +62,7 @@ export default function Login() {
         </button>
       </div>
 
+      {/* Main form */}
       <div className="relative z-10 max-w-2xl text-center px-4 py-16">
         <h1 className="text-4xl sm:text-5xl font-extrabold mb-6 leading-tight">
           Unlimited movies, TV shows, and more.
