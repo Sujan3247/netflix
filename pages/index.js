@@ -12,14 +12,14 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
 
-  // ✅ Redirect unauthenticated users (hook-safe)
+  // Redirect unauthenticated users
   useEffect(() => {
     if (!loading && !user) {
       router.replace("/login");
     }
   }, [user, loading, router]);
 
-  // ✅ Fetch movies after auth confirmed
+  // Fetch movies after auth
   useEffect(() => {
     if (user && !loading) {
       const fetchMovies = async () => {
@@ -45,7 +45,7 @@ export default function Home() {
     movie.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // ✅ Block UI rendering while loading/auth not ready
+  // Show spinner while loading
   if (loading || !user) {
     return (
       <div className="min-h-screen bg-black text-white flex flex-col justify-center items-center">
@@ -58,7 +58,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* NAVBAR */}
-      <nav className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-4 px-6 py-4 bg-black bg-opacity-80 backdrop-blur sticky top-0 z-50">
+      <nav className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-4 px-4 py-4 bg-black bg-opacity-80 backdrop-blur sticky top-0 z-50">
         <h1 className="text-2xl font-extrabold text-red-600">SujanFlix</h1>
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
           <input
@@ -90,7 +90,7 @@ export default function Home() {
             }')`,
           }}
         >
-          <div className="bg-black bg-opacity-60 p-4 sm:p-6 rounded max-w-full sm:max-w-2xl">
+          <div className="bg-black bg-opacity-60 p-4 sm:p-6 rounded w-full max-w-2xl">
             <h2 className="text-2xl sm:text-3xl font-bold mb-2">
               {featuredMovie.title}
             </h2>
@@ -107,13 +107,13 @@ export default function Home() {
       )}
 
       {/* MOVIE ROW */}
-      <section className="px-6 py-8">
+      <section className="px-4 py-8">
         <h3 className="text-2xl font-semibold mb-4">All Movies</h3>
-        <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+        <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide scroll-smooth snap-x snap-mandatory">
           {filteredMovies.map((movie) => (
             <div
               key={movie.id}
-              className="min-w-[240px] bg-zinc-900 rounded-lg shadow-lg p-3 flex-shrink-0 hover:scale-105 transition-transform"
+              className="min-w-full sm:min-w-[240px] bg-zinc-900 rounded-lg shadow-lg p-3 flex-shrink-0 hover:scale-105 transition-transform snap-start"
             >
               <div className="flex flex-col gap-2">
                 <Link href={`/movie/${movie.id}`}>
