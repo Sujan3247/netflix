@@ -51,13 +51,15 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* NAVBAR */}
-      <nav className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-4 px-4 py-4 bg-black bg-opacity-80 backdrop-blur sticky top-0 z-50">
-        <h1 className="text-2xl font-extrabold text-red-600">SujanFlix</h1>
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
+      <nav className="flex flex-col sm:flex-row sm:justify-between gap-4 px-4 py-4 bg-black bg-opacity-80 sticky top-0 z-50">
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-extrabold text-red-600">SujanFlix</h1>
+        </div>
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
           <input
             type="text"
             placeholder="Search..."
-            className="w-full sm:w-auto px-3 py-2 rounded bg-zinc-800 text-white border border-zinc-700"
+            className="w-full sm:w-auto px-4 py-2 rounded bg-zinc-800 text-white border border-zinc-700"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -65,7 +67,7 @@ export default function Home() {
             onClick={() => {
               auth.signOut().then(() => router.replace("/login"));
             }}
-            className="bg-gray-700 px-4 py-2 rounded hover:bg-gray-600 w-full sm:w-auto"
+            className="bg-gray-700 px-4 py-2 rounded hover:bg-gray-600"
           >
             Logout
           </button>
@@ -75,17 +77,17 @@ export default function Home() {
       {/* HERO BANNER */}
       {featuredMovie && (
         <div
-          className="relative h-[70vh] bg-cover bg-center flex items-end text-white"
+          className="relative h-[60vh] sm:h-[70vh] bg-cover bg-center flex items-end"
           style={{
             backgroundImage: `url('${featuredMovie.banner || "https://source.unsplash.com/1600x900/?cinema"}')`,
             boxShadow: "inset 0 -60px 80px rgba(0,0,0,0.8)",
           }}
         >
-          <div className="bg-black bg-opacity-60 p-6 w-full sm:max-w-2xl">
-            <h2 className="text-3xl sm:text-5xl font-bold mb-2 drop-shadow">
+          <div className="bg-black bg-opacity-60 p-6 w-full max-w-full sm:max-w-2xl">
+            <h2 className="text-2xl sm:text-4xl font-bold mb-2 drop-shadow">
               {featuredMovie.title}
             </h2>
-            <p className="text-sm sm:text-lg text-gray-300 mb-4 line-clamp-3">
+            <p className="text-sm sm:text-base text-gray-300 mb-4 line-clamp-3">
               {featuredMovie.description}
             </p>
             <Link href={`/movie/${featuredMovie.id}`}>
@@ -97,18 +99,18 @@ export default function Home() {
         </div>
       )}
 
-      {/* MOVIE ROW */}
+      {/* MOVIE LIST */}
       <section className="px-4 py-8">
         <h3 className="text-2xl font-semibold mb-4">All Movies</h3>
-        <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide scroll-smooth snap-x snap-mandatory">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {filteredMovies.map((movie) => (
             <div
               key={movie.id}
-              className="min-w-full sm:min-w-[240px] bg-zinc-900 rounded-lg shadow-lg p-3 flex-shrink-0 hover:scale-105 transition-transform snap-start"
+              className="bg-zinc-900 rounded-lg shadow-md hover:scale-105 transition-transform p-3"
             >
               <div className="flex flex-col gap-2">
                 <Link href={`/movie/${movie.id}`}>
-                  <h4 className="text-lg font-semibold text-red-400 hover:underline cursor-pointer">
+                  <h4 className="text-lg font-semibold text-red-400 hover:underline cursor-pointer truncate">
                     {movie.title}
                   </h4>
                 </Link>
@@ -117,11 +119,10 @@ export default function Home() {
                   loop
                   muted
                   playsInline
-                  className="rounded w-full"
+                  className="rounded w-full aspect-video"
                 >
                   <source src={movie.url} type="video/mp4" />
                 </video>
-
                 {user.email.toLowerCase() ===
                   "sujanchowdarypuvvada@gmail.com" && (
                   <button
