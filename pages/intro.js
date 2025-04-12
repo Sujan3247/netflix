@@ -15,7 +15,7 @@ export default function Intro() {
   return (
     <div className="h-screen w-screen bg-black flex items-center justify-center">
       <video
-        src="https://res.cloudinary.com/dijp53vwi/video/upload/v1744082802/IKhxRdN2UkQ_ejkwbs.mp4"
+        src="https://res.cloudinary.com/dijp53vwi/video/upload/v1744435333/untitled_1080p_ytuckm.mp4"
         autoPlay
         playsInline
         muted={false}
