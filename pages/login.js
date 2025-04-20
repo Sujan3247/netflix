@@ -48,7 +48,7 @@ export default function Login() {
 
       {/* ✅ Page header */}
       <div className="absolute top-0 left-0 right-0 z-10 px-6 py-4 flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-red-600">SujanFlix</h1>
+        <h1 className="text-3xl font-bold text-red-600">ThunderFlix</h1>
         <button
           onClick={() => setIsSignup(false)}
           className="bg-red-600 px-4 py-2 rounded font-semibold hover:bg-red-500"
