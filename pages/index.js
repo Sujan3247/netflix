@@ -53,7 +53,7 @@ export default function Home() {
       {/* NAVBAR */}
       <nav className="flex flex-col sm:flex-row sm:justify-between gap-4 px-4 py-4 bg-black bg-opacity-80 sticky top-0 z-50">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-extrabold text-red-600">SujanFlix</h1>
+          <h1 className="text-2xl font-extrabold text-red-600">ThunderFlix</h1>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
           <input
